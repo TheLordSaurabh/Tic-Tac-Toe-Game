@@ -34,6 +34,8 @@ const App = () => {
     const count = turns + 1;
     setTurns(count);
 
+    //Alternating the player
+    setXPlaying(!is_x_playing);
 
     //Check for winner and update the score
     const winner = checkForWinner(updatedBoard);
@@ -52,15 +54,17 @@ const App = () => {
       alert(`Player - ${winner} won the round ;)`);
       setTimeout(nextRound(),3000);
     }
-
-    //Alternating the player
-    setXPlaying(!is_x_playing);
-    //check if all boxes are filled and there is draw
-    if(turns == 9 && is_game_over == false){
-      setGameOver(true);
-      alert(`Draw :0`);
-      setTimeout(nextRound(),3000);
+    else{
+      //check if all boxes are filled and there is draw
+      if(turns === 9)
+      if(is_game_over === false){
+        setTurns(1);
+        setGameOver(true);
+        alert(`Draw :0`);
+        setTimeout(nextRound(),3000);
+      }
     }
+
   }
 
 
@@ -97,6 +101,7 @@ const App = () => {
 
       // Iterate through win conditions and check if either player satisfies them
       if (board[x] && board[x] === board[y] && board[y] === board[z]) {
+        setTurns(1);
         setGameOver(true);
         return board[x];
       }
