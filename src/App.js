@@ -57,6 +57,7 @@ const App = () => {
     setXPlaying(!is_x_playing);
     //check if all boxes are filled and there is draw
     if(turns == 9 && is_game_over == false){
+      setGameOver(true);
       alert(`Draw :0`);
       setTimeout(nextRound(),3000);
     }
