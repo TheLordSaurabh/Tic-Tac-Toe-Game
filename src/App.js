@@ -15,21 +15,25 @@ const App = () => {
   const [board, setBoard] = useState(Array(9).fill(null))
   const [scores, setScores] = useState({ x_score: 0, o_score: 0 })
   const [is_game_over, setGameOver] = useState(false);
+  const [turns, setTurns] = useState(1);
+
 
   const mainBoardHandling = (boxIdx) => {
-      allDone(board);
-      // Update the board
-
-      const updatedBoard = board.map((value, idx) => {
-        if (idx === boxIdx) {
-          return is_x_playing ? "X" : "O";
-        } 
-        else {
-          return value;
-        }
-      })
+    // Update the board
+    const updatedBoard = board.map((value, idx) => {
+      if (idx === boxIdx) {
+        return is_x_playing ? "X" : "O";
+      } 
+      else {
+        return value;
+      }
+    })
 
     setBoard(updatedBoard);
+
+    const count = turns + 1;
+    setTurns(count);
+
 
     //Check for winner and update the score
     const winner = checkForWinner(updatedBoard);
@@ -39,7 +43,8 @@ const App = () => {
         let { o_score } = scores;
         o_score += 1;
         setScores({ ...scores, o_score })
-      } else {
+      } 
+      else {
         let { x_score } = scores;
         x_score += 1;
         setScores({ ...scores, x_score })
@@ -50,29 +55,23 @@ const App = () => {
 
     //Alternating the player
     setXPlaying(!is_x_playing);
-  }
-
-  const allDone = () =>{
-    let l = board.length;
-      for(let i = 0; i < l; i++){
-        if((board[i] == 'X' || (board[i] == 'O')) == false){
-          return;
-        }
-      }
+    //check if all boxes are filled and there is draw
+    if(turns == 9 && is_game_over == false){
       alert(`Draw :0`);
       setTimeout(nextRound(),3000);
+    }
   }
-
 
 
   const restartGame = () => {
-      let conf_msg = "Do you want to restart the game??";
-      if(!window.confirm(conf_msg)){
-        return;
-      }
-      setGameOver(false);
-      setBoard(Array(9).fill(null));
-      setScores({ x_score: 0, o_score: 0 });
+    let conf_msg = "Do you want to restart the game??";
+    if(!window.confirm(conf_msg)){
+      return;
+    }
+    setTurns(1);
+    setGameOver(false);
+    setBoard(Array(9).fill(null));
+    setScores({ x_score: 0, o_score: 0 });
   }
 
   const resetBoard = () => {
@@ -80,11 +79,13 @@ const App = () => {
     if(!window.confirm(conf_msg)){
       return;
     }
+    setTurns(1);
     setGameOver(false);
     setBoard(Array(9).fill(null));
   }
 
   const nextRound = () => {
+    setTurns(1);
     setGameOver(false);
     setBoard(Array(9).fill(null));
   }
@@ -107,7 +108,6 @@ const App = () => {
       <RestartButton restartGame = {restartGame}/>
       <ResetButton resetBoard={resetBoard} />
       <Board board={board} onClick={is_game_over ? resetBoard : mainBoardHandling} />
-      
     </div>
   );
 }
